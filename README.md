@@ -1,73 +1,100 @@
-# React + TypeScript + Vite
+# Pre-Alert Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern React-based dashboard for managing shipment pre-alerts, built with performance and user experience in mind.
 
-Currently, two official plugins are available:
+![Project Status](https://img.shields.io/badge/status-active-success.svg)
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Overview
 
-## React Compiler
+The **Pre-Alert Management System** is designed to streamline the tracking and management of inbound and outbound shipments. It provides a comprehensive dashboard for visualizing shipment data, filtering records, and performing discrepancy checks using a comparison tool.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠️ Tech Stack
 
-## Expanding the ESLint configuration
+This project uses a modern frontend stack to ensure scalability and maintainability:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Framework**: [React](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
+- **Build Tool**: [Vite](https://vitejs.dev/)
+- **UI Component Library**: [Mantine](https://mantine.dev/) (v7)
+- **Data Grid**: [AG Grid](https://www.ag-grid.com/)
+- **Icons**: [Tabler Icons](https://tabler-icons.io/)
+- **Date Handling**: [Day.js](https://day.js.org/)
+- **Styling**: PostCSS with Mantine's styling system
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## ✨ Key Features
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **📊 Interactive Dashboard**: A central hub for monitoring shipments.
+- **🔍 Advanced Filtering**: Filter data by:
+  - Direction (Inbound/Outbound)
+  - MAWB (Master Air Waybill) number
+  - Date Ranges (From/To)
+- **⚡ Real-time Search**: Instant search capabilities for finding specific shipment records.
+- **🔄 Comparison Tool**: A built-in `MismatchModal` to compare datasets and identify discrepancies.
+- **📁 Data Management**:
+  - View detailed shipment tables.
+  - Soft delete functionality for shipment items.
+  - Export capabilities (UI placeholder).
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 📦 Getting Started
+
+Follow these steps to set up the project locally.
+
+### Prerequisites
+
+- **Node.js**: Ensure you have Node.js installed (v18+ recommended).
+- **Package Manager**: npm (comes with Node.js) or yarn/pnpm.
+
+### Installation
+
+1. **Clone the repository** (if applicable) or navigate to the project directory.
+2. **Install dependencies**:
+   ```bash
+   npm install
+   # or
+   yarn install
+   # or
+   pnpm install
+   ```
+
+### Running the Application
+
+To start the development server:
+
+```bash
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The application will be available at `http://localhost:5173` (or the port shown in your terminal).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 📂 Project Structure
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+A quick look at the top-level files and directories:
+
 ```
+.
+├── src/
+│   ├── components/       # UI Components (Dashboard, ShipmentTable, etc.)
+│   ├── data/             # Mock data for development
+│   ├── App.tsx           # Main application component
+│   └── main.tsx          # Entry point
+├── public/               # Static assets
+├── package.json          # Project metadata and dependencies
+└── vite.config.ts        # Vite configuration
+```
+
+## 📜 Scripts
+
+- `npm run dev`: Starts the development server.
+- `npm run build`: Builds the app for production.
+- `npm run lint`: Runs ESLint to check for code quality issues.
+- `npm run preview`: Locally preview the production build.
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome!
+
+1. Fork the project.
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`).
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
+4. Push to the branch (`git push origin feature/AmazingFeature`).
+5. Open a Pull Request.
