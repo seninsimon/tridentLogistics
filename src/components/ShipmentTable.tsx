@@ -28,9 +28,6 @@ export function ShipmentTable({
   countryCode = "CN",
   status = "Uploaded",
   referenceNo,
-  variant = "active",
-  onDelete,
-  onRestore,
 }: ShipmentTableProps) {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState<string>("15");
