@@ -142,7 +142,7 @@ export function Dashboard() {
                 color="blue"
                 size="xs"
                 onClick={() => {
-                  /* Trigger search */
+                
                 }}
               >
                 Search
@@ -167,18 +167,7 @@ export function Dashboard() {
             </Group>
           </Grid.Col>
         </Grid>
-        {/* <Group mt="xs" justify="flex-end" gap="xs">
-          <Button
-            leftSection={<IconUpload size={14} />}
-            variant="subtle"
-            size="xs"
-          >
-            Upload Pre-Alert
-          </Button>
-          <Button variant="subtle" size="xs">
-            Update from 810
-          </Button>
-        </Group> */}
+        
       </Paper>
 
       {/* Tables Area */}
@@ -190,10 +179,16 @@ export function Dashboard() {
               <ShipmentTable
                 data={filteredShipment1}
                 shipmentId="176-16884485"
-                mauwb="176-..."
-                date="15/10/2025"
+                timestamp="15/10/2025 13:24:46"
+                startDate="15/10/2025 00:00:00"
+                endDate="15/10/2025 00:00:00"
+                count={1}
+                countryCode="CN"
+                status="Uploaded"
+                referenceNo="BK019092"
                 variant="active"
                 onDelete={(id) => handleDelete(id, "list1")}
+                
               />
             </Box>
 
@@ -202,8 +197,13 @@ export function Dashboard() {
               <ShipmentTable
                 data={filteredShipment2}
                 shipmentId="176-16406143"
-                mauwb="176-..."
-                date="08/10/2025"
+                timestamp="08/10/2025 09:28:11"
+                startDate="07/10/2025 00:00:00"
+                endDate="07/10/2025 00:00:00"
+                count={2}
+                countryCode="CN"
+                status="Uploaded"
+                referenceNo="BK018987"
                 variant="active"
                 onDelete={(id) => handleDelete(id, "list2")}
               />

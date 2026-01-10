@@ -141,7 +141,7 @@ export function MismatchModal({ opened, onClose }: MismatchModalProps) {
             </Text>
           </Box>
           <div
-            className="ag-theme-quartz"
+            className="ag-theme-quartz mismatch-grid"
             style={{ height: "400px", width: "100%" }}
           >
             <AgGridReact rowData={data810} columnDefs={colDefs} />
@@ -166,7 +166,7 @@ export function MismatchModal({ opened, onClose }: MismatchModalProps) {
             </Text>
           </Box>
           <div
-            className="ag-theme-quartz"
+            className="ag-theme-quartz mismatch-grid"
             style={{ height: "400px", width: "100%" }}
           >
             <AgGridReact rowData={dataPreAlert} columnDefs={colDefs} />

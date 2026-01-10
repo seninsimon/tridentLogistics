@@ -65,3 +65,39 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+
+.ag-header-bold .ag-header-cell-label {
+  font-weight: 600; /* semi-bold */
+}
+
+/* Reduce row data size in AG Grid */
+.data-font .ag-cell {
+  font-size: 12px; /* Reduce from default ~14px */
+  padding: 4px 8px; /* Tighter padding */
+}
+
+.data-font .ag-row {
+  height: 32px !important; /* Reduce row height (default is ~42px) */
+}
+
+.data-font .ag-header-cell {
+  font-size: 13px; /* Match header size */
+}
+
+
+
+.mismatch-grid.ag-theme-quartz .ag-header-cell-label {
+  font-weight: 700;
+}
+
+.mismatch-grid.ag-theme-quartz .ag-cell {
+  font-weight: 400;
+  font-size: 13px;
+}
+
+.mismatch-grid.ag-theme-quartz {
+  --ag-row-height: 32px;
+}
+
+
