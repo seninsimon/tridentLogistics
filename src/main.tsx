@@ -7,10 +7,6 @@ import App from "./App.tsx";
 import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 
-// AgGrid styles
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
-
 import "./index.css";
 
 const theme = createTheme({

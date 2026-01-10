@@ -66,38 +66,51 @@ button:focus-visible {
   }
 }
 
-
-.ag-header-bold .ag-header-cell-label {
-  font-weight: 600; /* semi-bold */
+/* Mantine Table Styles - Shipment Table */
+.shipment-table {
+  font-size: 12px;
 }
 
-/* Reduce row data size in AG Grid */
-.data-font .ag-cell {
-  font-size: 12px; /* Reduce from default ~14px */
-  padding: 4px 8px; /* Tighter padding */
+.shipment-table th {
+  font-weight: 600;
+  font-size: 13px;
 }
 
-.data-font .ag-row {
-  height: 32px !important; /* Reduce row height (default is ~42px) */
+.shipment-table td {
+  font-size: 12px;
 }
 
-.data-font .ag-header-cell {
-  font-size: 13px; /* Match header size */
-}
-
-
-
-.mismatch-grid.ag-theme-quartz .ag-header-cell-label {
+/* Mantine Table Styles - Mismatch Modal */
+.mismatch-table th {
   font-weight: 700;
+  font-size: 13px;
 }
 
-.mismatch-grid.ag-theme-quartz .ag-cell {
+.mismatch-table td {
   font-weight: 400;
   font-size: 13px;
 }
 
-.mismatch-grid.ag-theme-quartz {
-  --ag-row-height: 32px;
+/* MantineReactTable Styles - Alternating Row Colors */
+.mantine-Table-tr:nth-of-type(odd) {
+  background-color: #f8f9fa;
+}
+
+.mantine-Table-tr:nth-of-type(even) {
+  background-color: #ffffff;
+}
+
+.mantine-Table-tr:hover {
+  background-color: #e9ecef !important;
+}
+
+/* Column drag handle styling */
+.mrt-table-head-cell-grabber {
+  cursor: grab;
+}
+
+.mrt-table-head-cell-grabber:active {
+  cursor: grabbing;
 }
 
 
