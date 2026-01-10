@@ -66,38 +66,27 @@ button:focus-visible {
   }
 }
 
-
-.ag-header-bold .ag-header-cell-label {
-  font-weight: 600; /* semi-bold */
+/* Mantine Table Styles - Shipment Table */
+.shipment-table {
+  font-size: 12px;
 }
 
-/* Reduce row data size in AG Grid */
-.data-font .ag-cell {
-  font-size: 12px; /* Reduce from default ~14px */
-  padding: 4px 8px; /* Tighter padding */
-}
-
-.data-font .ag-row {
-  height: 32px !important; /* Reduce row height (default is ~42px) */
-}
-
-.data-font .ag-header-cell {
-  font-size: 13px; /* Match header size */
-}
-
-
-
-.mismatch-grid.ag-theme-quartz .ag-header-cell-label {
-  font-weight: 700;
-}
-
-.mismatch-grid.ag-theme-quartz .ag-cell {
-  font-weight: 400;
+.shipment-table th {
+  font-weight: 600;
   font-size: 13px;
 }
 
-.mismatch-grid.ag-theme-quartz {
-  --ag-row-height: 32px;
+.shipment-table td {
+  font-size: 12px;
 }
 
+/* Mantine Table Styles - Mismatch Modal */
+.mismatch-table th {
+  font-weight: 700;
+  font-size: 13px;
+}
 
+.mismatch-table td {
+  font-weight: 400;
+  font-size: 13px;
+}

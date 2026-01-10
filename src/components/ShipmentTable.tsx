@@ -1,15 +1,5 @@
-import { useMemo } from "react";
-import { AgGridReact } from "ag-grid-react";
-import {
-  ModuleRegistry,
-  ClientSideRowModelModule,
-  PaginationModule,
-  type ColDef,
-} from "ag-grid-community";
-import { Box, Group, Text } from "@mantine/core";
-// import { IconTrash, IconRotateClockwise } from "@tabler/icons-react";
-
-ModuleRegistry.registerModules([ClientSideRowModelModule, PaginationModule]);
+import { useMemo, useState } from "react";
+import { Box, Group, Text, Table, Pagination, Select } from "@mantine/core";
 
 interface ShipmentTableProps {
   data: any[];
@@ -42,81 +32,51 @@ export function ShipmentTable({
   onDelete,
   onRestore,
 }: ShipmentTableProps) {
-  const colDefs: ColDef[] = useMemo(
-    () => [
-      {
-        field: "dnNo",
-        headerName: "DN No",
-        headerClass: "ag-header-bold",
-        rowDrag: variant === "active",
-        width: 140,
-        
-      },
-      { field: "partNo", 
-        headerName: "Part No", 
-        headerClass: "ag-header-bold",
-        width: 130 },
-      {
-        field: "productName",
-        headerName: "Product Name",
-        headerClass: "ag-header-bold",
-        flex: 1,
-        minWidth: 200,
-      },
-      {
-        field: "coo",
-        headerName: "COO",
-        headerClass: "ag-header-bold",
-        width: 80,
-      },
-      {
-        field: "hsCode",
-        headerName: "HS Code",
-        headerClass: "ag-header-bold",
-        width: 130,
-      },
-      {
-        field: "qty",
-        headerName: "QTY",
-        headerClass: "ag-header-bold",
-        width: 90,
-        type: "numericColumn",
-       
-      },
-      {
-        field: "unitPrice",
-        headerName: "Unit Price",
-        headerClass: "ag-header-bold",
-        width: 110,
-        type: "numericColumn",
-        valueFormatter: (p) => `$${p.value}`,
-        cellStyle: { textAlign: "right" },
-      },
-      {
-        field: "totalPriceUSD",
-        headerName: "Total Price (USD)",
-        headerClass: "ag-header-bold",
-        width: 140,
-        type: "numericColumn",
-        valueFormatter: (p) => `$${p.value}`,
-        cellStyle: { textAlign: "right" },
-      },
-      {
-        field: "totalPriceSAR",
-        headerName: "Total Price (SAR)",
-        headerClass: "ag-header-bold",
-        width: 140,
-        type: "numericColumn",
-        valueFormatter: (p) => `SAR ${p.value}`,
-        cellStyle: { textAlign: "right" },
-      },
-    ],
-    [variant, onDelete, onRestore]
-  );
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState<string>("15");
+
+  const pageSizeNum = parseInt(pageSize, 10);
+  const totalPages = Math.ceil(data.length / pageSizeNum);
+
+  const paginatedData = useMemo(() => {
+    const start = (page - 1) * pageSizeNum;
+    const end = start + pageSizeNum;
+    return data.slice(start, end);
+  }, [data, page, pageSizeNum]);
 
   const totalQty = data.reduce((acc, curr) => acc + curr.qty, 0);
   const totalUSD = data.reduce((acc, curr) => acc + curr.totalPriceUSD, 0);
   const totalSAR = data.reduce((acc, curr) => acc + curr.totalPriceSAR, 0);
+
+  const columns = [
+    { key: "dnNo", label: "DN No", width: 140 },
+    { key: "partNo", label: "Part No", width: 130 },
+    { key: "productName", label: "Product Name", flex: true, minWidth: 200 },
+    { key: "coo", label: "COO", width: 80 },
+    { key: "hsCode", label: "HS Code", width: 130 },
+    { key: "qty", label: "QTY", width: 90, align: "right" as const },
+    {
+      key: "unitPrice",
+      label: "Unit Price",
+      width: 110,
+      align: "right" as const,
+      format: (v: number) => `$${v}`,
+    },
+    {
+      key: "totalPriceUSD",
+      label: "Total Price (USD)",
+      width: 140,
+      align: "right" as const,
+      format: (v: number) => `$${v}`,
+    },
+    {
+      key: "totalPriceSAR",
+      label: "Total Price (SAR)",
+      width: 140,
+      align: "right" as const,
+      format: (v: number) => `SAR ${v}`,
+    },
+  ];
 
   return (
     <Box
@@ -135,12 +95,14 @@ export function ShipmentTable({
           borderBottom: "1px solid #1a5c47",
         }}
       >
-        <Group gap="lg" wrap="nowrap" justify="center" style={{ overflowX: "auto" }}>
+        <Group
+          gap="lg"
+          wrap="nowrap"
+          justify="center"
+          style={{ overflowX: "auto" }}
+        >
           {/* Shipment ID */}
           <Box style={{ minWidth: 120 }}>
-            {/* <Text size="xs" c="rgba(255,255,255,0.7)" mb={2}>
-              Shipment ID
-            </Text> */}
             <Text size="sm" fw={700} c="white">
               {shipmentId || "—"}
             </Text>
@@ -148,9 +110,6 @@ export function ShipmentTable({
 
           {/* Timestamp */}
           <Box style={{ minWidth: 160 }}>
-            {/* <Text size="xs" c="rgba(255,255,255,0.7)" mb={2}>
-              Timestamp
-            </Text> */}
             <Text size="sm" fw={500} c="white">
               {timestamp || "—"}
             </Text>
@@ -158,9 +117,6 @@ export function ShipmentTable({
 
           {/* Start Date */}
           <Box style={{ minWidth: 160 }}>
-            {/* <Text size="xs" c="rgba(255,255,255,0.7)" mb={2}>
-              Start Date
-            </Text> */}
             <Text size="sm" fw={500} c="white">
               {startDate || "—"}
             </Text>
@@ -168,9 +124,6 @@ export function ShipmentTable({
 
           {/* End Date */}
           <Box style={{ minWidth: 160 }}>
-            {/* <Text size="xs" c="rgba(255,255,255,0.7)" mb={2}>
-              End Date
-            </Text> */}
             <Text size="sm" fw={500} c="white">
               {endDate || "—"}
             </Text>
@@ -178,9 +131,6 @@ export function ShipmentTable({
 
           {/* Count */}
           <Box style={{ minWidth: 60, textAlign: "center" }}>
-            {/* <Text size="xs" c="rgba(255,255,255,0.7)" mb={2}>
-              Count
-            </Text> */}
             <Text size="sm" fw={700} c="white">
               {count}
             </Text>
@@ -188,9 +138,6 @@ export function ShipmentTable({
 
           {/* Country Code */}
           <Box style={{ minWidth: 60, textAlign: "center" }}>
-            {/* <Text size="xs" c="rgba(255,255,255,0.7)" mb={2}>
-              Country
-            </Text> */}
             <Text size="sm" fw={700} c="white">
               {countryCode}
             </Text>
@@ -198,9 +145,6 @@ export function ShipmentTable({
 
           {/* Status */}
           <Box style={{ minWidth: 100, textAlign: "center" }}>
-            {/* <Text size="xs" c="rgba(255,255,255,0.7)" mb={2}>
-              Status
-            </Text> */}
             <Text
               color={
                 status === "Uploaded"
@@ -218,9 +162,6 @@ export function ShipmentTable({
 
           {/* Reference No */}
           <Box style={{ minWidth: 110 }}>
-              {/* <Text size="xs" c="rgba(255,255,255,0.7)" mb={2}>
-                Reference
-              </Text> */}
             <Text
               size="sm"
               fw={600}
@@ -255,20 +196,93 @@ export function ShipmentTable({
         </Text>
       </Group>
 
-      {/* Grid */}
-      <div className="ag-theme-quartz data-font" style={{ width: "100%" }}>
-        <AgGridReact
-          rowData={data}
-          columnDefs={colDefs}
-          rowDragManaged={variant === "active"}
-          animateRows={true}
-          rowSelection="multiple"
-          domLayout="autoHeight"
-          pagination={true}
-          paginationPageSize={15}
-          paginationPageSizeSelector={[15, 25, 50]}
-        />
-      </div>
+      {/* Table */}
+      <Box style={{ overflowX: "auto" }}>
+        <Table
+          striped
+          highlightOnHover
+          withTableBorder={false}
+          className="shipment-table"
+        >
+          <Table.Thead>
+            <Table.Tr>
+              {columns.map((col) => (
+                <Table.Th
+                  key={col.key}
+                  style={{
+                    width: col.width,
+                    minWidth: col.minWidth,
+                    flex: col.flex ? 1 : undefined,
+                    textAlign: col.align || "left",
+                    fontWeight: 600,
+                    fontSize: "13px",
+                    padding: "8px 12px",
+                    backgroundColor: "var(--mantine-color-gray-0)",
+                  }}
+                >
+                  {col.label}
+                </Table.Th>
+              ))}
+            </Table.Tr>
+          </Table.Thead>
+          <Table.Tbody>
+            {paginatedData.map((row, idx) => (
+              <Table.Tr key={row.id || idx}>
+                {columns.map((col) => (
+                  <Table.Td
+                    key={col.key}
+                    style={{
+                      textAlign: col.align || "left",
+                      fontSize: "12px",
+                      padding: "6px 12px",
+                    }}
+                  >
+                    {col.format ? col.format(row[col.key]) : row[col.key]}
+                  </Table.Td>
+                ))}
+              </Table.Tr>
+            ))}
+          </Table.Tbody>
+        </Table>
+      </Box>
+
+      {/* Pagination */}
+      <Group
+        justify="space-between"
+        p="xs"
+        bg="gray.0"
+        style={{ borderTop: "1px solid var(--mantine-color-gray-3)" }}
+      >
+        <Group gap="xs">
+          <Text size="xs" c="dimmed">
+            Rows per page:
+          </Text>
+          <Select
+            data={["15", "25", "50"]}
+            value={pageSize}
+            onChange={(val) => {
+              setPageSize(val || "15");
+              setPage(1);
+            }}
+            size="xs"
+            style={{ width: 70 }}
+            withCheckIcon={false}
+          />
+        </Group>
+        <Group gap="xs">
+          <Text size="xs" c="dimmed">
+            {(page - 1) * pageSizeNum + 1}-
+            {Math.min(page * pageSizeNum, data.length)} of {data.length}
+          </Text>
+          <Pagination
+            total={totalPages}
+            value={page}
+            onChange={setPage}
+            size="xs"
+            withEdges
+          />
+        </Group>
+      </Group>
     </Box>
   );
 }

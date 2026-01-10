@@ -8,17 +8,11 @@ import {
   Button,
   Box,
   SimpleGrid,
+  Table,
+  ScrollArea,
 } from "@mantine/core";
-import { AgGridReact } from "ag-grid-react";
-import {
-  ModuleRegistry,
-  ClientSideRowModelModule,
-  type ColDef,
-} from "ag-grid-community";
 import { useMemo, useState } from "react";
 import { shipment1 } from "../data";
-
-ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
 interface MismatchModalProps {
   opened: boolean;
@@ -37,27 +31,61 @@ export function MismatchModal({ opened, onClose }: MismatchModalProps) {
     })
   );
 
-  const colDefs: ColDef[] = useMemo(
+  const columns = useMemo(
     () => [
-      { field: "dnNo", headerName: "DN No", flex: 1, minWidth: 120 },
-      { field: "partNo", headerName: "Part No", flex: 1, minWidth: 120 },
-      { field: "qty", headerName: "QTY", width: 80 },
-      {
-        field: "unitPrice",
-        headerName: "Unit Price",
-        flex: 1,
-        minWidth: 100,
-        cellStyle: (params) =>
-          params.data.mismatch ? { backgroundColor: "#ffcccc" } : null,
-      },
-      {
-        field: "totalPriceUSD",
-        headerName: "Total Price",
-        flex: 1,
-        minWidth: 100,
-      },
+      { key: "dnNo", label: "DN No", flex: true, minWidth: 120 },
+      { key: "partNo", label: "Part No", flex: true, minWidth: 120 },
+      { key: "qty", label: "QTY", width: 80 },
+      { key: "unitPrice", label: "Unit Price", flex: true, minWidth: 100 },
+      { key: "totalPriceUSD", label: "Total Price", flex: true, minWidth: 100 },
     ],
     []
+  );
+
+  const renderTable = (data: any[], highlightMismatch = false) => (
+    <Table striped highlightOnHover className="mismatch-table">
+      <Table.Thead>
+        <Table.Tr>
+          {columns.map((col) => (
+            <Table.Th
+              key={col.key}
+              style={{
+                width: col.width,
+                minWidth: col.minWidth,
+                flex: col.flex ? 1 : undefined,
+                fontWeight: 700,
+                fontSize: "13px",
+                padding: "8px 10px",
+              }}
+            >
+              {col.label}
+            </Table.Th>
+          ))}
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody>
+        {data.map((row, idx) => (
+          <Table.Tr key={row.id || idx}>
+            {columns.map((col) => (
+              <Table.Td
+                key={col.key}
+                style={{
+                  fontSize: "13px",
+                  fontWeight: 400,
+                  padding: "6px 10px",
+                  backgroundColor:
+                    highlightMismatch && row.mismatch && col.key === "unitPrice"
+                      ? "#ffcccc"
+                      : undefined,
+                }}
+              >
+                {row[col.key]}
+              </Table.Td>
+            ))}
+          </Table.Tr>
+        ))}
+      </Table.Tbody>
+    </Table>
   );
 
   return (
@@ -140,12 +168,12 @@ export function MismatchModal({ opened, onClose }: MismatchModalProps) {
               810 Data
             </Text>
           </Box>
-          <div
-            className="ag-theme-quartz mismatch-grid"
-            style={{ height: "400px", width: "100%" }}
+          <ScrollArea
+            h={400}
+            style={{ border: "1px solid var(--mantine-color-gray-3)" }}
           >
-            <AgGridReact rowData={data810} columnDefs={colDefs} />
-          </div>
+            {renderTable(data810, false)}
+          </ScrollArea>
           <Group justify="space-between" bg="blue.0" p="xs">
             <Text size="xs">Items: {data810.length}</Text>
             <Text size="xs" fw={700}>
@@ -165,12 +193,12 @@ export function MismatchModal({ opened, onClose }: MismatchModalProps) {
               Pre Alert Data
             </Text>
           </Box>
-          <div
-            className="ag-theme-quartz mismatch-grid"
-            style={{ height: "400px", width: "100%" }}
+          <ScrollArea
+            h={400}
+            style={{ border: "1px solid var(--mantine-color-gray-3)" }}
           >
-            <AgGridReact rowData={dataPreAlert} columnDefs={colDefs} />
-          </div>
+            {renderTable(dataPreAlert, true)}
+          </ScrollArea>
           <Group justify="space-between" bg="orange.0" p="xs">
             <Text size="xs">Items: {dataPreAlert.length}</Text>
             <Text size="xs" fw={700}>
@@ -179,12 +207,6 @@ export function MismatchModal({ opened, onClose }: MismatchModalProps) {
           </Group>
         </Grid.Col>
       </Grid>
-
-      {/* <Group justify="flex-end" mt="md">
-          <Button variant="default" onClick={onClose}>
-            Close
-          </Button>
-        </Group> */}
     </Modal>
   );
 }
