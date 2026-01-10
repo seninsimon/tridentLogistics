@@ -51,7 +51,7 @@ export function Sidebar() {
       <Text size="xs" fw={700} c="dimmed" mb="sm" tt="uppercase">
         Operation
       </Text>
-      <ScrollArea style={{ flex: 1 }}>{items}</ScrollArea>
+      <ScrollArea scrollbarSize={6} style={{ flex: 1 }}>{items}</ScrollArea>
     </Stack>
   );
 }

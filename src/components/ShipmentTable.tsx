@@ -59,40 +59,40 @@ export function ShipmentTable({
       {
         accessorKey: "dnNo",
         header: "DN No",
-        size: 140,
+        size: 100,
       },
       {
         accessorKey: "partNo",
         header: "Part No",
-        size: 130,
+        size: 100,
       },
       {
         accessorKey: "productName",
         header: "Product Name",
-        size: 200,
+        size: 100,
         grow: true,
       },
       {
         accessorKey: "coo",
         header: "COO",
-        size: 80,
+        size: 100,
       },
       {
         accessorKey: "hsCode",
         header: "HS Code",
-        size: 130,
+        size: 100,
       },
       {
         accessorKey: "qty",
         header: "QTY",
-        size: 90,
+        size: 100,
         mantineTableHeadCellProps: { align: "right" },
         mantineTableBodyCellProps: { align: "right" },
       },
       {
         accessorKey: "unitPrice",
         header: "Unit Price",
-        size: 110,
+        size: 100,
         mantineTableHeadCellProps: { align: "right" },
         mantineTableBodyCellProps: { align: "right" },
         Cell: ({ cell }) => `$${cell.getValue<number>()}`,
@@ -100,7 +100,7 @@ export function ShipmentTable({
       {
         accessorKey: "totalPriceUSD",
         header: "Total Price (USD)",
-        size: 140,
+        size: 100,
         mantineTableHeadCellProps: { align: "right" },
         mantineTableBodyCellProps: { align: "right" },
         Cell: ({ cell }) => `$${cell.getValue<number>()}`,
@@ -108,7 +108,7 @@ export function ShipmentTable({
       {
         accessorKey: "totalPriceSAR",
         header: "Total Price (SAR)",
-        size: 140,
+        size: 100,
         mantineTableHeadCellProps: { align: "right" },
         mantineTableBodyCellProps: { align: "right" },
         Cell: ({ cell }) => `SAR ${cell.getValue<number>()}`,
@@ -117,43 +117,71 @@ export function ShipmentTable({
     []
   );
 
-  const table = useMantineReactTable({
-    columns,
-    data,
-    enableColumnOrdering: true, // Enable column drag and drop reordering
-    enableSorting: true,
-    enableColumnResizing: true,
-    enablePagination: true,
-    initialState: {
-      pagination: { pageSize: parseInt(pageSize, 10), pageIndex: 0 },
-      density: "xs",
+const table = useMantineReactTable({
+  columns,
+  data,
+
+  // 🔹 Core features you want
+  // enableColumnOrdering: true,
+  enableSorting: false,
+  enableColumnResizing: false,
+  enablePagination: true,
+  enableColumnDragging: false,
+
+  // 🔹 Remove all extra/bulky features
+  enableTopToolbar: false,
+  enableBottomToolbar: false,
+  enableColumnActions: false,
+  enableDensityToggle: false,
+  enableFullScreenToggle: false,
+  enableGlobalFilter: false,
+  enableFilters: false,
+  enableHiding: false,
+
+  initialState: {
+    pagination: {
+      pageSize: parseInt(pageSize, 10),
+      pageIndex: 0,
     },
-    mantineTableProps: {
-      striped: true, // Alternating row colors like MismatchModal
-      highlightOnHover: true,
-      withTableBorder: false,
-      className: "shipment-table",
+    density: "xs",
+  },
+
+  mantineTableProps: {
+    striped: true,
+    highlightOnHover: true,
+    withTableBorder: false,
+    className: "shipment-table",
+  },
+
+  // 🔑 Header visibility fix
+  mantineTableHeadCellProps: {
+    style: {
+      fontWeight: 600,
+      fontSize: "13px",
+      padding: "8px 12px",
+      backgroundColor: "var(--mantine-color-gray-0)",
+      whiteSpace: "nowrap",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
     },
-    mantineTableHeadCellProps: {
-      style: {
-        fontWeight: 600,
-        fontSize: "13px",
-        padding: "8px 12px",
-        backgroundColor: "var(--mantine-color-gray-0)",
-      },
+  },
+
+  mantineTableBodyCellProps: {
+    style: {
+      fontSize: "12px",
+      padding: "6px 12px",
+      whiteSpace: "nowrap",
     },
-    mantineTableBodyCellProps: {
-      style: {
-        fontSize: "12px",
-        padding: "6px 12px",
-      },
-    },
-    mantinePaginationProps: {
-      rowsPerPageOptions: ["15", "25", "50"],
-    },
-    paginationDisplayMode: "pages",
-    positionPagination: "bottom",
-  });
+  },
+
+  mantinePaginationProps: {
+    rowsPerPageOptions: ["15", "25", "50"],
+  },
+
+  paginationDisplayMode: "pages",
+  positionPagination: "bottom",
+});
+
 
   return (
     <Box
