@@ -90,3 +90,25 @@ button:focus-visible {
   font-weight: 400;
   font-size: 13px;
 }
+
+/* MantineReactTable Styles - Alternating Row Colors */
+.mantine-Table-tr:nth-of-type(odd) {
+  background-color: #f8f9fa;
+}
+
+.mantine-Table-tr:nth-of-type(even) {
+  background-color: #ffffff;
+}
+
+.mantine-Table-tr:hover {
+  background-color: #e9ecef !important;
+}
+
+/* Column drag handle styling */
+.mrt-table-head-cell-grabber {
+  cursor: grab;
+}
+
+.mrt-table-head-cell-grabber:active {
+  cursor: grabbing;
+}

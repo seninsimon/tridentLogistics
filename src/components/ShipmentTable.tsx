@@ -1,8 +1,26 @@
 import { useMemo, useState } from "react";
-import { Box, Group, Text, Table, Pagination, Select } from "@mantine/core";
+import { Box, Group, Text, Select } from "@mantine/core";
+import {
+  MantineReactTable,
+  useMantineReactTable,
+  type MRT_ColumnDef,
+} from "mantine-react-table";
+
+interface ShipmentData {
+  id?: string;
+  dnNo: string;
+  partNo: string;
+  productName: string;
+  coo: string;
+  hsCode: string;
+  qty: number;
+  unitPrice: number;
+  totalPriceUSD: number;
+  totalPriceSAR: number;
+}
 
 interface ShipmentTableProps {
-  data: any[];
+  data: ShipmentData[];
   shipmentId?: string;
   mauwb?: string;
   date?: string;
@@ -29,51 +47,113 @@ export function ShipmentTable({
   status = "Uploaded",
   referenceNo,
 }: ShipmentTableProps) {
-  const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState<string>("15");
-
-  const pageSizeNum = parseInt(pageSize, 10);
-  const totalPages = Math.ceil(data.length / pageSizeNum);
-
-  const paginatedData = useMemo(() => {
-    const start = (page - 1) * pageSizeNum;
-    const end = start + pageSizeNum;
-    return data.slice(start, end);
-  }, [data, page, pageSizeNum]);
 
   const totalQty = data.reduce((acc, curr) => acc + curr.qty, 0);
   const totalUSD = data.reduce((acc, curr) => acc + curr.totalPriceUSD, 0);
   const totalSAR = data.reduce((acc, curr) => acc + curr.totalPriceSAR, 0);
 
-  const columns = [
-    { key: "dnNo", label: "DN No", width: 140 },
-    { key: "partNo", label: "Part No", width: 130 },
-    { key: "productName", label: "Product Name", flex: true, minWidth: 200 },
-    { key: "coo", label: "COO", width: 80 },
-    { key: "hsCode", label: "HS Code", width: 130 },
-    { key: "qty", label: "QTY", width: 90, align: "right" as const },
-    {
-      key: "unitPrice",
-      label: "Unit Price",
-      width: 110,
-      align: "right" as const,
-      format: (v: number) => `$${v}`,
+  const columns = useMemo<MRT_ColumnDef<ShipmentData>[]>(
+    () => [
+      {
+        accessorKey: "dnNo",
+        header: "DN No",
+        size: 140,
+      },
+      {
+        accessorKey: "partNo",
+        header: "Part No",
+        size: 130,
+      },
+      {
+        accessorKey: "productName",
+        header: "Product Name",
+        size: 200,
+        grow: true,
+      },
+      {
+        accessorKey: "coo",
+        header: "COO",
+        size: 80,
+      },
+      {
+        accessorKey: "hsCode",
+        header: "HS Code",
+        size: 130,
+      },
+      {
+        accessorKey: "qty",
+        header: "QTY",
+        size: 90,
+        mantineTableHeadCellProps: { align: "right" },
+        mantineTableBodyCellProps: { align: "right" },
+      },
+      {
+        accessorKey: "unitPrice",
+        header: "Unit Price",
+        size: 110,
+        mantineTableHeadCellProps: { align: "right" },
+        mantineTableBodyCellProps: { align: "right" },
+        Cell: ({ cell }) => `$${cell.getValue<number>()}`,
+      },
+      {
+        accessorKey: "totalPriceUSD",
+        header: "Total Price (USD)",
+        size: 140,
+        mantineTableHeadCellProps: { align: "right" },
+        mantineTableBodyCellProps: { align: "right" },
+        Cell: ({ cell }) => `$${cell.getValue<number>()}`,
+      },
+      {
+        accessorKey: "totalPriceSAR",
+        header: "Total Price (SAR)",
+        size: 140,
+        mantineTableHeadCellProps: { align: "right" },
+        mantineTableBodyCellProps: { align: "right" },
+        Cell: ({ cell }) => `SAR ${cell.getValue<number>()}`,
+      },
+    ],
+    []
+  );
+
+  const table = useMantineReactTable({
+    columns,
+    data,
+    enableColumnDragging: true, // Enable column dragging
+    enableColumnOrdering: true, // Enable column reordering
+    enableSorting: true,
+    enableColumnResizing: true,
+    enablePagination: true,
+    initialState: {
+      pagination: { pageSize: parseInt(pageSize, 10), pageIndex: 0 },
+      density: "xs",
     },
-    {
-      key: "totalPriceUSD",
-      label: "Total Price (USD)",
-      width: 140,
-      align: "right" as const,
-      format: (v: number) => `$${v}`,
+    mantineTableProps: {
+      striped: true, // Alternating row colors
+      highlightOnHover: true,
+      withTableBorder: false,
+      className: "shipment-table",
     },
-    {
-      key: "totalPriceSAR",
-      label: "Total Price (SAR)",
-      width: 140,
-      align: "right" as const,
-      format: (v: number) => `SAR ${v}`,
+    mantineTableHeadCellProps: {
+      style: {
+        fontWeight: 600,
+        fontSize: "13px",
+        padding: "8px 12px",
+        backgroundColor: "var(--mantine-color-gray-0)",
+      },
     },
-  ];
+    mantineTableBodyCellProps: {
+      style: {
+        fontSize: "12px",
+        padding: "6px 12px",
+      },
+    },
+    mantinePaginationProps: {
+      rowsPerPageOptions: ["15", "25", "50"],
+    },
+    paginationDisplayMode: "pages",
+    positionPagination: "bottom",
+  });
 
   return (
     <Box
@@ -193,57 +273,12 @@ export function ShipmentTable({
         </Text>
       </Group>
 
-      {/* Table */}
+      {/* MantineReactTable with draggable columns and striped rows */}
       <Box style={{ overflowX: "auto" }}>
-        <Table
-          striped
-          highlightOnHover
-          withTableBorder={false}
-          className="shipment-table"
-        >
-          <Table.Thead>
-            <Table.Tr>
-              {columns.map((col) => (
-                <Table.Th
-                  key={col.key}
-                  style={{
-                    width: col.width,
-                    minWidth: col.minWidth,
-                    flex: col.flex ? 1 : undefined,
-                    textAlign: col.align || "left",
-                    fontWeight: 600,
-                    fontSize: "13px",
-                    padding: "8px 12px",
-                    backgroundColor: "var(--mantine-color-gray-0)",
-                  }}
-                >
-                  {col.label}
-                </Table.Th>
-              ))}
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>
-            {paginatedData.map((row, idx) => (
-              <Table.Tr key={row.id || idx}>
-                {columns.map((col) => (
-                  <Table.Td
-                    key={col.key}
-                    style={{
-                      textAlign: col.align || "left",
-                      fontSize: "12px",
-                      padding: "6px 12px",
-                    }}
-                  >
-                    {col.format ? col.format(row[col.key]) : row[col.key]}
-                  </Table.Td>
-                ))}
-              </Table.Tr>
-            ))}
-          </Table.Tbody>
-        </Table>
+        <MantineReactTable table={table} />
       </Box>
 
-      {/* Pagination */}
+      {/* Custom Pagination Footer */}
       <Group
         justify="space-between"
         p="xs"
@@ -259,7 +294,7 @@ export function ShipmentTable({
             value={pageSize}
             onChange={(val) => {
               setPageSize(val || "15");
-              setPage(1);
+              table.setPageSize(parseInt(val || "15", 10));
             }}
             size="xs"
             style={{ width: 70 }}
@@ -268,16 +303,9 @@ export function ShipmentTable({
         </Group>
         <Group gap="xs">
           <Text size="xs" c="dimmed">
-            {(page - 1) * pageSizeNum + 1}-
-            {Math.min(page * pageSizeNum, data.length)} of {data.length}
+            Page {table.getState().pagination.pageIndex + 1} of{" "}
+            {table.getPageCount()}
           </Text>
-          <Pagination
-            total={totalPages}
-            value={page}
-            onChange={setPage}
-            size="xs"
-            withEdges
-          />
         </Group>
       </Group>
     </Box>
