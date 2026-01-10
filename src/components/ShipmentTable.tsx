@@ -5,6 +5,7 @@ import {
   useMantineReactTable,
   type MRT_ColumnDef,
 } from "mantine-react-table";
+import "mantine-react-table/styles.css";
 
 interface ShipmentData {
   id?: string;
@@ -119,8 +120,7 @@ export function ShipmentTable({
   const table = useMantineReactTable({
     columns,
     data,
-    enableColumnDragging: true, // Enable column dragging
-    enableColumnOrdering: true, // Enable column reordering
+    enableColumnOrdering: true, // Enable column drag and drop reordering
     enableSorting: true,
     enableColumnResizing: true,
     enablePagination: true,
@@ -129,7 +129,7 @@ export function ShipmentTable({
       density: "xs",
     },
     mantineTableProps: {
-      striped: true, // Alternating row colors
+      striped: true, // Alternating row colors like MismatchModal
       highlightOnHover: true,
       withTableBorder: false,
       className: "shipment-table",
